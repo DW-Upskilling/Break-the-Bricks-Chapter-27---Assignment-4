@@ -1,9 +1,11 @@
 public class Constants
 {
 
-    public static readonly string LevelStatusKey = "LevelStatus-";
-
+    // Total Levels in the Game
     public static readonly int TotalLevels = 8;
+
+    // Prefix of the PlayerPrefs
+    public static readonly string LevelStatusKey = "LevelStatus-";
 
     public static int getScene(string sceneName)
     {

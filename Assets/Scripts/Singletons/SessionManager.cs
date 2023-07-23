@@ -5,8 +5,8 @@ public class SessionManager : MonoBehaviour
     private static SessionManager instance = null;
     public static SessionManager Instance { get { return instance; } }
 
-    private bool intiated = false;
-    public bool Intiated { get { return intiated; } set { intiated = value; } }
+    private bool showMainMenu = false;
+    public bool ShowMainMenu { get { return showMainMenu; } set { showMainMenu = value; } }
 
     void Awake()
     {
