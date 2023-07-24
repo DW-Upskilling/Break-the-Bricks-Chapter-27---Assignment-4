@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BallController : MonoBehaviour
+public class BrickController : MonoBehaviour
 {
 
 }

@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class PaddleController : MonoBehaviour
 {
-    private float direction = 0;
+    float direction;
+    PaddleModel paddleModel;
+
     public float Direction
     {
         get
@@ -13,9 +15,16 @@ public class PaddleController : MonoBehaviour
         }
     }
 
+    void Awake()
+    {
+        direction = 0;
+        paddleModel = gameObject.GetComponent<PaddleModel>();
+    }
+
     void Update()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
+        float jump = Input.GetAxisRaw("Jump");
 
         if (horizontal < 0)
         {
@@ -28,6 +37,11 @@ public class PaddleController : MonoBehaviour
         else
         {
             direction = 0;
+        }
+
+        if (jump > 0)
+        {
+            paddleModel.Shoot();
         }
     }
 }
