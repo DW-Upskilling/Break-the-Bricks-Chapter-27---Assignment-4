@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    [SerializeField]
+    private Sound[] sounds;
+
     private static AudioManager instance = null;
     public static AudioManager Instance { get { return instance; } }
 

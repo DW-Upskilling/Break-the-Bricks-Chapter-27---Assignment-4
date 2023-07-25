@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PaddleController : MonoBehaviour
 {
+
     float direction;
     PaddleModel paddleModel;
 
@@ -15,17 +16,22 @@ public class PaddleController : MonoBehaviour
         }
     }
 
+    Vector2 mousePosition;
+    public Vector2 MousePosition { get { return mousePosition; } }
+
     void Awake()
     {
         direction = 0;
         paddleModel = gameObject.GetComponent<PaddleModel>();
+        if (paddleModel == null)
+            throw new MissingComponentException();
     }
 
     void Update()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float jump = Input.GetAxisRaw("Jump");
+        mousePosition = Input.mousePosition;
 
+        float horizontal = Input.GetAxisRaw("Horizontal");
         if (horizontal < 0)
         {
             direction = -1;
@@ -39,9 +45,10 @@ public class PaddleController : MonoBehaviour
             direction = 0;
         }
 
-        if (jump > 0)
+        float shoot = Input.GetAxisRaw("Fire1");
+        if (shoot > 0 && paddleModel.AvailableToShoot && paddleModel.AvailableToMove)
         {
-            paddleModel.Shoot();
+            paddleModel.Trigger();
         }
     }
 }

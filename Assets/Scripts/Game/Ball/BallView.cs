@@ -9,6 +9,7 @@ public class BallView : MonoBehaviour
     float height, width;
     public float Height { get { return height; } }
     public float Width { get { return width; } }
+    public Vector3 Position { get { return gameObject.transform.position; } }
 
     void Awake()
     {
@@ -25,12 +26,16 @@ public class BallView : MonoBehaviour
     {
         Vector3 position = gameObject.transform.position;
 
-        if (position.x > screenBounds.x || position.x < -screenBounds.x || position.y > screenBounds.y || position.y < -screenBounds.y)
-            ballModel.ResetMotion();
-
         // If Ball is in motion don't perform any position update
         if (ballModel.IsMoving)
+        {
+            // If ball goes out of the screen bounds then reset it back on paddle
+            if (position.x != Mathf.Clamp(position.x, -screenBounds.x, screenBounds.x))
+                ballModel.ResetMotion();
+            if (position.y != Mathf.Clamp(position.y, -screenBounds.y, screenBounds.y))
+                ballModel.ResetMotion();
             return;
+        }
 
         position = ballController.PaddleView.Position;
         position.y += ballController.PaddleView.Height + height;

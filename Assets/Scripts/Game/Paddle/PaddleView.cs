@@ -19,6 +19,9 @@ public class PaddleView : MonoBehaviour
         paddleModel = gameObject.GetComponent<PaddleModel>();
         paddleController = gameObject.GetComponent<PaddleController>();
 
+        if (paddleController == null || paddleModel == null)
+            throw new MissingComponentException();
+
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
         width = gameObject.transform.gameObject.GetComponent<SpriteRenderer>().bounds.size.x / 2;
@@ -35,10 +38,24 @@ public class PaddleView : MonoBehaviour
 
     void FixedUpdate()
     {
+        GameObject mouseTracker = paddleModel.MouseTracker;
+        if (mouseTracker == null)
+            throw new MissingReferenceException();
+
+        if (!paddleModel.AvailableToMove)
+        {
+            mouseTracker.SetActive(false);
+            return;
+        }
+        mouseTracker.SetActive(true);
+
         Vector2 position = gameObject.transform.position;
         position.x = Mathf.Clamp(position.x + paddleModel.Speed * paddleController.Direction * Time.fixedDeltaTime, AxisXLeft, AxisXRight);
         position.y = AxisY;
 
         gameObject.transform.position = position;
+
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(paddleController.MousePosition);
+        mouseTracker.transform.position = mousePosition;
     }
 }
