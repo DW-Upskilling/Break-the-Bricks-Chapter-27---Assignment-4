@@ -1,7 +1,20 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PaddleView : MonoBehaviour
 {
+
+    [SerializeField]
+    Color IdleColor = Color.yellow;
+    [SerializeField]
+    Color ActiveColor = Color.green;
+    [SerializeField]
+    Color BusyColor = Color.red;
+
+    [SerializeField]
+    TextMeshProUGUI speedTextObject;
+
     public Vector3 Position { get { return gameObject.transform.position; } }
 
     float width, height;
@@ -14,12 +27,15 @@ public class PaddleView : MonoBehaviour
     Vector2 screenBounds;
     float AxisXLeft, AxisXRight, AxisY;
 
+    SpriteRenderer spriteRenderer;
+
     void Awake()
     {
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         paddleModel = gameObject.GetComponent<PaddleModel>();
         paddleController = gameObject.GetComponent<PaddleController>();
 
-        if (paddleController == null || paddleModel == null)
+        if (paddleController == null || paddleModel == null || spriteRenderer == null)
             throw new MissingComponentException();
 
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
@@ -45,17 +61,33 @@ public class PaddleView : MonoBehaviour
         if (!paddleModel.AvailableToMove)
         {
             mouseTracker.SetActive(false);
+            spriteRenderer.color = BusyColor;
             return;
+        }
+        else if (!paddleModel.AvailableToShoot)
+        {
+            spriteRenderer.color = IdleColor;
+        }
+        else
+        {
+            spriteRenderer.color = ActiveColor;
         }
         mouseTracker.SetActive(true);
 
+
         Vector2 position = gameObject.transform.position;
-        position.x = Mathf.Clamp(position.x + paddleModel.Speed * paddleController.Direction * Time.fixedDeltaTime, AxisXLeft, AxisXRight);
+        position.x = Mathf.Clamp(position.x + paddleModel.PaddleSpeed * paddleController.Direction * Time.fixedDeltaTime, AxisXLeft, AxisXRight);
         position.y = AxisY;
 
         gameObject.transform.position = position;
 
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(paddleController.MousePosition);
         mouseTracker.transform.position = mousePosition;
+
+        if (speedTextObject != null)
+        {
+            ;
+            speedTextObject.text = "Speed: " + (Mathf.Clamp01(paddleModel.ShootForce / 3f) * 100f).ToString("F2") + "%";
+        }
     }
 }

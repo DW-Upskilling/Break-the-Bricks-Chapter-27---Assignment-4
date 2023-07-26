@@ -16,6 +16,9 @@ public class BallView : MonoBehaviour
         ballModel = gameObject.GetComponent<BallModel>();
         ballController = gameObject.GetComponent<BallController>();
 
+        if (ballModel == null || ballController == null)
+            throw new MissingComponentException();
+
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
 
         width = gameObject.transform.gameObject.GetComponent<SpriteRenderer>().bounds.size.x / 2;
@@ -32,14 +35,16 @@ public class BallView : MonoBehaviour
             // If ball goes out of the screen bounds then reset it back on paddle
             if (position.x != Mathf.Clamp(position.x, -screenBounds.x, screenBounds.x))
                 ballModel.ResetMotion();
-            if (position.y != Mathf.Clamp(position.y, -screenBounds.y, screenBounds.y))
+            else if (position.y != Mathf.Clamp(position.y, -screenBounds.y, screenBounds.y))
                 ballModel.ResetMotion();
-            return;
         }
+        else
+        {
 
-        position = ballController.PaddleView.Position;
-        position.y += ballController.PaddleView.Height + height;
+            position = ballController.PaddleView.Position;
+            position.y += ballController.PaddleView.Height + height;
 
-        gameObject.transform.position = position;
+            gameObject.transform.position = position;
+        }
     }
 }

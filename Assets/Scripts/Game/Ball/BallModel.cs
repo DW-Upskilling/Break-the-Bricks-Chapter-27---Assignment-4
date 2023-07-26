@@ -6,8 +6,6 @@ public class BallModel : MonoBehaviour
     [SerializeField]
     PhysicsMaterial2D BallPhysicsMaterial2D;
 
-    float shootForce = .2f;
-
     PaddleModel paddleModel;
     public PaddleModel PaddleModel { get { return paddleModel; } set { paddleModel = value; } }
 
@@ -38,12 +36,13 @@ public class BallModel : MonoBehaviour
             rigidbody2D.sharedMaterial = BallPhysicsMaterial2D;
             isMoving = true;
 
-            rigidbody2D.AddForce(direction * shootForce, ForceMode2D.Impulse);
+            rigidbody2D.AddForce(direction * PaddleModel.ShootForce, ForceMode2D.Impulse);
         }
     }
 
     public void ResetMotion()
     {
+        // Resets the Ball to resting position and back on to the paddle
         Rigidbody2D rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
         if (rigidbody2D != null && paddleModel != null)
         {

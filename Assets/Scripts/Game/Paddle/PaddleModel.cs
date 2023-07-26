@@ -10,8 +10,12 @@ public class PaddleModel : MonoBehaviour
     int totalBalls = 100;
 
     [SerializeField]
-    float speed = 10f;
-    public float Speed { get { return speed; } }
+    float paddleSpeed = 10f;
+    public float PaddleSpeed { get { return paddleSpeed; } }
+
+    [SerializeField]
+    float shootForce = .3f;
+    public float ShootForce { get { return shootForce; } set { shootForce = Mathf.Clamp(shootForce + value, .1f, 3f); } }
 
     GameObject mouseTracker;
     public GameObject MouseTracker { get { return mouseTracker; } }
@@ -87,8 +91,12 @@ public class PaddleModel : MonoBehaviour
 
     IEnumerator Shoot()
     {
-        Vector2 direction = mouseTracker.transform.position;
+        Vector2 direction = mouseTracker.transform.position - gameObject.transform.position;
         availableToMove = false;
+
+        float waitingTime = Mathf.Clamp(Balls.Length / shootForce, 1f, 3f);
+        float avgWaitingTime = waitingTime / Balls.Length;
+
         for (int i = 0; i < Balls.Length; i++)
         {
             lock (lockObject)
@@ -96,7 +104,7 @@ public class PaddleModel : MonoBehaviour
                 BallsTracker[i] = true;
                 ballsOnPaddle--;
                 Balls[i].Shoot(direction);
-                yield return new WaitForSeconds(0.01f);
+                yield return new WaitForSeconds(avgWaitingTime);
             }
         }
         availableToMove = true;

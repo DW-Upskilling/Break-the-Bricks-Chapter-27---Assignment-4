@@ -2,10 +2,9 @@ using UnityEngine;
 
 public class PaddleController : MonoBehaviour
 {
-
-    float direction;
     PaddleModel paddleModel;
 
+    float direction;
     public float Direction
     {
         get
@@ -43,6 +42,16 @@ public class PaddleController : MonoBehaviour
         else
         {
             direction = 0;
+        }
+
+        float vertical = Input.GetAxisRaw("Vertical");
+        if (vertical < 0)
+        {
+            paddleModel.ShootForce = -.1f * Time.deltaTime;
+        }
+        else if (vertical > 0)
+        {
+            paddleModel.ShootForce = .1f * Time.deltaTime;
         }
 
         float shoot = Input.GetAxisRaw("Fire1");
