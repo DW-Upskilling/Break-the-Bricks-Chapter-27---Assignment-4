@@ -1,17 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class LevelHandler : MonoBehaviour
 {
     [SerializeField]
-    private GameObject PaddlePrefab, brickPrefab, ballPrefab;
+    int level = 0;
     [SerializeField]
-    private GameObject[] brickDropTypePrefabs;
-    // Start is called before the first frame update
-    void Start()
-    {
+    TextMeshProUGUI levelTextObject, scoreTextObject;
 
+    void Awake()
+    {
+        if (levelTextObject != null)
+        {
+            levelTextObject.text = "Level: " + level;
+        }
+
+        if (scoreTextObject != null)
+        {
+            scoreTextObject.text = "Score: 0";
+        }
     }
 
     // Update is called once per frame
