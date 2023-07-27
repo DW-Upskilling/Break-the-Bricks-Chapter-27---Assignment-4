@@ -6,15 +6,23 @@ public class MenuHandler : MonoBehaviour
 {
 
     [SerializeField]
-    private GameObject LockedButtonPrefab, UnlockedButtonPrefab, CompletedButtonPrefab;
+    GameObject LockedButtonPrefab, UnlockedButtonPrefab, CompletedButtonPrefab;
     [SerializeField]
-    private GameObject MenuSection, LevelsSection;
+    GameObject MenuSection, LevelsSection;
 
     [SerializeField]
-    private Button StartButton, QuitButton, BackButton, SettingsButton;
+    Button StartButton, QuitButton, BackButton, SettingsButton;
+
+    SessionManager sessionManager;
+    LevelManager levelManager;
 
     void Start()
     {
+        sessionManager = SessionManager.Instance;
+        levelManager = LevelManager.Instance;
+        if (sessionManager == null || levelManager == null)
+            throw new MissingReferenceException("SessionManager, LevelManager");
+
         if (StartButton != null)
             StartButton.onClick.AddListener(StartButtonAction);
         if (QuitButton != null)
@@ -27,9 +35,7 @@ public class MenuHandler : MonoBehaviour
 
     void StartButtonAction()
     {
-        if (SessionManager.Instance == null)
-            return;
-        SessionManager.Instance.ShowMainMenu = false;
+        sessionManager.ShowMainMenu = false;
         LevelsSectionReload();
         ToggleMainMenu();
     }
@@ -39,10 +45,7 @@ public class MenuHandler : MonoBehaviour
     }
     void BackButtonAction()
     {
-        if (SessionManager.Instance == null)
-            return;
-
-        SessionManager.Instance.ShowMainMenu = true;
+        sessionManager.ShowMainMenu = true;
         ToggleMainMenu();
     }
     void QuitButtonAction()
@@ -52,11 +55,6 @@ public class MenuHandler : MonoBehaviour
 
     void LevelsSectionReload()
     {
-        // Check if the SessionManager Singleton is available
-        SessionManager session = SessionManager.Instance;
-        if (session == null)
-            return;
-
         // Clear the LevelsSection template to refresh the levels
         Transform transform = LevelsSection.transform;
         for (int i = 0; i < transform.childCount; i++)
@@ -67,7 +65,7 @@ public class MenuHandler : MonoBehaviour
         // Add the levels with latest status into the LevelsSection
         for (int i = 0; i < Constants.TotalLevels; i++)
         {
-            LevelStatus levelStatus = session.GetLevelStatus(i + 1);
+            LevelStatus levelStatus = sessionManager.GetLevelStatus(i + 1);
             GameObject levelObject = null;
             switch (levelStatus)
             {
@@ -84,12 +82,20 @@ public class MenuHandler : MonoBehaviour
             if (levelObject == null || levelObject.transform.childCount < 1)
                 continue;
 
+            int levelValue = i + 1;
+            levelObject.name = "Level " + levelValue;
+
+            levelObject.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                sessionManager.SetCurrentLevel(gameObject, levelValue);
+                levelManager.LoadScene(levelValue);
+            });
+
             GameObject childObject = levelObject.transform.GetChild(0).gameObject;
             if (childObject.GetComponent<TextMeshProUGUI>() != null)
             {
-                childObject.GetComponent<TextMeshProUGUI>().text = "Level-" + (i + 1);
+                childObject.GetComponent<TextMeshProUGUI>().text = "Level-" + levelValue;
             }
-
         }
     }
 

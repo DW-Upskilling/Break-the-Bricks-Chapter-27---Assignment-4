@@ -10,7 +10,11 @@ public class LevelManager : MonoBehaviour
 
     // Maintains the index from the scenes in build
     [SerializeField]
-    private int[] levelSceneIndices;
+    int[] levelSceneIndices;
+
+    // Maintains the index of mainmenu in build
+    [SerializeField]
+    int mainMenuSceneIndex = 0;
 
     void Awake()
     {
@@ -32,4 +36,14 @@ public class LevelManager : MonoBehaviour
 
         return levelSceneIndices[level - 1];
     }
+
+    public void LoadScene(int level)
+    {
+        if (level < 1 || level > Constants.TotalLevels)
+        {
+            SceneManager.LoadScene(mainMenuSceneIndex);
+        }
+        else SceneManager.LoadScene(getLevelSceneId(level));
+    }
+
 }

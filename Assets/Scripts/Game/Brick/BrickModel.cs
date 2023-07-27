@@ -15,7 +15,6 @@ public class BrickModel : MonoBehaviour
         {
             if (collision.gameObject.GetComponent<BallModel>() != null)
             {
-                Debug.Log(hits);
                 hits--;
             }
         }

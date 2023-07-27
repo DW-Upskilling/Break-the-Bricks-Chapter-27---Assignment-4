@@ -8,6 +8,9 @@ public class SessionManager : MonoBehaviour
     private bool showMainMenu = false;
     public bool ShowMainMenu { get { return showMainMenu; } set { showMainMenu = value; } }
 
+    int currentLevel = 0;
+    public int CurrentLevel { get { return currentLevel; } }
+
     void Awake()
     {
         if (instance == null)
@@ -21,8 +24,42 @@ public class SessionManager : MonoBehaviour
         }
     }
 
-    public void SetLevelStatus(int level, LevelStatus levelStatus)
+    public int GetNextLevel()
     {
+        if (GetLevelStatus(currentLevel + 1) == LevelStatus.Locked)
+            return currentLevel;
+
+        return currentLevel + 1;
+    }
+
+    public void SetCurrentLevel(GameObject _gameObject, int level)
+    {
+        if (GetLevelStatus(level) == LevelStatus.Locked)
+            return;
+
+        if (_gameObject.GetComponent<MenuHandler>() != null)
+        {
+            currentLevel = level;
+        }
+        else if (_gameObject.GetComponent<LevelHandler>() != null)
+        {
+            currentLevel = level;
+        }
+    }
+
+    public void SetLevelStatus(GameObject _gameObject, LevelStatus levelStatus)
+    {
+        if (_gameObject.GetComponent<LevelHandler>() == null)
+            return;
+        string key = Constants.LevelStatusKey + currentLevel;
+        PlayerPrefs.SetInt(key, (int)levelStatus);
+    }
+
+    public void SetLevelStatus(GameObject _gameObject, LevelStatus levelStatus, int level)
+    {
+        if (_gameObject.GetComponent<LevelHandler>() == null)
+            return;
+
         string key = Constants.LevelStatusKey + level;
         PlayerPrefs.SetInt(key, (int)levelStatus);
     }

@@ -15,7 +15,7 @@ public class PaddleModel : MonoBehaviour
 
     [SerializeField]
     float shootForce = .3f;
-    public float ShootForce { get { return shootForce; } set { shootForce = Mathf.Clamp(shootForce + value, .1f, 3f); } }
+    public float ShootForce { get { return shootForce; } set { shootForce = Mathf.Clamp(shootForce + value, .1f, 1f); } }
 
     GameObject mouseTracker;
     public GameObject MouseTracker { get { return mouseTracker; } }
@@ -94,7 +94,7 @@ public class PaddleModel : MonoBehaviour
         Vector2 direction = mouseTracker.transform.position - gameObject.transform.position;
         availableToMove = false;
 
-        float waitingTime = Mathf.Clamp(Balls.Length / shootForce, 1f, 3f);
+        float waitingTime = Mathf.Clamp(Balls.Length / shootForce, .5f, 1.5f);
         float avgWaitingTime = waitingTime / Balls.Length;
 
         for (int i = 0; i < Balls.Length; i++)
