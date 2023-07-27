@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
+
 
 public class MenuHandler : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class MenuHandler : MonoBehaviour
     GameObject LockedButtonPrefab, UnlockedButtonPrefab, CompletedButtonPrefab;
     [SerializeField]
     GameObject MenuSection, LevelsSection;
+
+    [SerializeField]
+    int settingsSceneBuildIndex;
 
     [SerializeField]
     Button StartButton, QuitButton, BackButton, SettingsButton;
@@ -41,7 +46,7 @@ public class MenuHandler : MonoBehaviour
     }
     void SettingsButtonAction()
     {
-        // TODO: Render Settings Scene
+        SceneManager.LoadScene(settingsSceneBuildIndex);
     }
     void BackButtonAction()
     {

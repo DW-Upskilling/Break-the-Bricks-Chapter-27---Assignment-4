@@ -26,7 +26,7 @@ public class SessionManager : MonoBehaviour
 
     public int GetNextLevel()
     {
-        if (GetLevelStatus(currentLevel + 1) == LevelStatus.Locked)
+        if (GetLevelStatus(currentLevel + 1) == LevelStatus.Locked || Constants.TotalLevels <= currentLevel)
             return currentLevel;
 
         return currentLevel + 1;

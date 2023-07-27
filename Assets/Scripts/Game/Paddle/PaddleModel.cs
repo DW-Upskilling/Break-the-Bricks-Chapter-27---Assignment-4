@@ -79,6 +79,7 @@ public class PaddleModel : MonoBehaviour
 
     public void Rest(int index)
     {
+        // If this method is invoked then particular ball reported back on paddle
         if (index >= 0 && index < Balls.Length)
         {
             if (BallsTracker[index] != false)
@@ -91,6 +92,7 @@ public class PaddleModel : MonoBehaviour
 
     IEnumerator Shoot()
     {
+        // calculating the direction based on the mouse tracker position
         Vector2 direction = mouseTracker.transform.position - gameObject.transform.position;
         availableToMove = false;
 
@@ -99,6 +101,7 @@ public class PaddleModel : MonoBehaviour
 
         for (int i = 0; i < Balls.Length; i++)
         {
+            // Since parallel access might happen locking the objects
             lock (lockObject)
             {
                 BallsTracker[i] = true;
@@ -107,6 +110,7 @@ public class PaddleModel : MonoBehaviour
                 yield return new WaitForSeconds(avgWaitingTime);
             }
         }
+        // Paddle will be able to move again horizontally
         availableToMove = true;
     }
 

@@ -35,6 +35,7 @@ public class BallController : MonoBehaviour
 
     void Update()
     {
+        // if there is no movement then reset the ball back on paddle
         if (_rigidbody2D.velocity.magnitude <= 0f)
         {
             ballModel.ResetMotion();
@@ -43,6 +44,7 @@ public class BallController : MonoBehaviour
 
     public void Shoot(Vector2 direction)
     {
+        // shoot the ball only if it is not in motion
         if (ballModel.IsMoving == false)
         {
             ballModel.Trigger(direction);

@@ -55,8 +55,6 @@ public class LevelHandler : MonoBehaviour
         score = 0;
 
         levelComplete = false;
-
-        Debug.Log("Level: " + level);
     }
 
     void Update()
@@ -67,6 +65,8 @@ public class LevelHandler : MonoBehaviour
         currentStandardBricks = StandardBrickType.transform.childCount;
         currentBonusBricks = BonusBrickType.transform.childCount;
 
+        // Calculating Score
+        // Priority: 80% Standard Bricks, 20% Bonus Bricks
         score = Mathf.RoundToInt(
             Mathf.Clamp01(
                 (totalStandardBricks - currentStandardBricks) / totalStandardBricks
@@ -75,6 +75,7 @@ public class LevelHandler : MonoBehaviour
             ) * 20f
         );
 
+        // If all standardBricks were cleared consider level complete
         if (currentStandardBricks == 0)
         {
             levelComplete = true;
@@ -87,9 +88,11 @@ public class LevelHandler : MonoBehaviour
 
     void LateUpdate()
     {
+        // if levelCompleteMenu is active then no need for other code exec
         if (levelCompleteMenu.activeSelf == true)
             return;
 
+        // Updating the text gameObjects on the scene
         if (levelTextObject != null)
             levelTextObject.text = "Level: " + level;
         if (scoreTextObject != null)
@@ -100,6 +103,7 @@ public class LevelHandler : MonoBehaviour
             paddle.SetActive(false);
             levelCompleteMenu.SetActive(true);
 
+            // NextLevelButton not required if there is no next level
             if (sessionManager.GetNextLevel() == sessionManager.CurrentLevel)
                 nextLevelButton.gameObject.SetActive(false);
             else
