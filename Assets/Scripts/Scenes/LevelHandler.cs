@@ -26,8 +26,12 @@ public class LevelHandler : MonoBehaviour
 
     SessionManager sessionManager;
     LevelManager levelManager;
+    AudioManager audioManager;
 
-    void Awake()
+    AudioSource UIButtonClickAudio;
+    AudioSource LevelBackgroundAudio;
+
+    void Start()
     {
         if (StandardBrickType == null || BonusBrickType == null)
             throw new MissingReferenceException("StandardBrickType, BonusBrickType");
@@ -38,8 +42,15 @@ public class LevelHandler : MonoBehaviour
 
         sessionManager = SessionManager.Instance;
         levelManager = LevelManager.Instance;
-        if (sessionManager == null || levelManager == null)
-            throw new MissingReferenceException("SessionManager, LevelManager");
+        audioManager = AudioManager.Instance;
+        if (sessionManager == null || levelManager == null || audioManager == null)
+            throw new MissingReferenceException("SessionManager, LevelManager, AudioManager");
+
+        LevelBackgroundAudio = audioManager.findAudio(2);
+        UIButtonClickAudio = audioManager.findAudio("UIButtonClick");
+
+        if (LevelBackgroundAudio != null)
+            LevelBackgroundAudio.Play();
 
         level = sessionManager.CurrentLevel;
 
@@ -116,17 +127,29 @@ public class LevelHandler : MonoBehaviour
 
     void NextLevelButtonAction()
     {
+        if (UIButtonClickAudio != null)
+            UIButtonClickAudio.Play();
+        if (LevelBackgroundAudio != null)
+            LevelBackgroundAudio.Pause();
         sessionManager.SetCurrentLevel(gameObject, sessionManager.GetNextLevel());
         levelManager.LoadScene(sessionManager.CurrentLevel);
     }
 
     void RestartLevelButtonAction()
     {
+        if (UIButtonClickAudio != null)
+            UIButtonClickAudio.Play();
+        if (LevelBackgroundAudio != null)
+            LevelBackgroundAudio.Pause();
         levelManager.LoadScene(sessionManager.CurrentLevel);
     }
 
     void MainMenuButtonAction()
     {
+        if (UIButtonClickAudio != null)
+            UIButtonClickAudio.Play();
+        if (LevelBackgroundAudio != null)
+            LevelBackgroundAudio.Pause();
         levelManager.LoadScene(-1);
     }
 }

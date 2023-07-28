@@ -13,7 +13,7 @@ public class PaddleView : MonoBehaviour
     Color BusyColor = Color.red;
 
     [SerializeField]
-    TextMeshProUGUI speedTextObject;
+    TextMeshProUGUI speedTextObject, totalBallsTextObject;
 
     public Vector3 Position { get { return gameObject.transform.position; } }
 
@@ -85,9 +85,10 @@ public class PaddleView : MonoBehaviour
         mouseTracker.transform.position = mousePosition;
 
         if (speedTextObject != null)
-        {
-            ;
             speedTextObject.text = "Speed: " + (Mathf.Clamp01(paddleModel.ShootForce / 3f) * 100f).ToString("F2") + "%";
-        }
+
+        if (totalBallsTextObject)
+            totalBallsTextObject.text = paddleModel.BallsOnPaddle.ToString();
+
     }
 }

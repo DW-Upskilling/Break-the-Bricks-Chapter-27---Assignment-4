@@ -1,10 +1,14 @@
 using UnityEngine;
+using TMPro;
 
 public class BrickView : MonoBehaviour
 {
 
     [SerializeField]
     Color color = Color.white;
+
+    [SerializeField]
+    TextMeshProUGUI hitsTextObject;
 
     BrickModel brickModel;
 
@@ -21,6 +25,9 @@ public class BrickView : MonoBehaviour
 
     void LateUpdate()
     {
+        if (hitsTextObject != null)
+            hitsTextObject.text = brickModel.Hits.ToString();
+
         // If number of hits left reaches 0 then break the brick(destory)
         if (brickModel.Hits <= 0)
         {

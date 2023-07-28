@@ -20,6 +20,9 @@ public class PaddleModel : MonoBehaviour
     GameObject mouseTracker;
     public GameObject MouseTracker { get { return mouseTracker; } }
 
+    int ballsOnPaddle;
+    public int BallsOnPaddle { get { return ballsOnPaddle; } }
+
     bool availableToMove;
     public bool AvailableToMove { get { return availableToMove; } }
     public bool AvailableToShoot { get { return ballsOnPaddle == totalBalls; } }
@@ -28,7 +31,6 @@ public class PaddleModel : MonoBehaviour
     BallController[] Balls;
     // Used for making sure balls beign used or not and keep track
     bool[] BallsTracker;
-    int ballsOnPaddle;
     readonly object lockObject = new object();
 
     void Awake()

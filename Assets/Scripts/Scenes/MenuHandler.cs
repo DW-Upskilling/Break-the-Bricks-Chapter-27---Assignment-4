@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-
 public class MenuHandler : MonoBehaviour
 {
 
@@ -20,13 +19,24 @@ public class MenuHandler : MonoBehaviour
 
     SessionManager sessionManager;
     LevelManager levelManager;
+    AudioManager audioManager;
+
+    AudioSource UIButtonClickAudio;
+    AudioSource MainMenuBackgroundAudio;
 
     void Start()
     {
         sessionManager = SessionManager.Instance;
         levelManager = LevelManager.Instance;
-        if (sessionManager == null || levelManager == null)
-            throw new MissingReferenceException("SessionManager, LevelManager");
+        audioManager = AudioManager.Instance;
+        if (sessionManager == null || levelManager == null || audioManager == null)
+            throw new MissingReferenceException("SessionManager, LevelManager, AudioManager");
+
+        MainMenuBackgroundAudio = audioManager.findAudio(1);
+        UIButtonClickAudio = audioManager.findAudio("UIButtonClick");
+
+        if (MainMenuBackgroundAudio != null)
+            MainMenuBackgroundAudio.Play();
 
         if (StartButton != null)
             StartButton.onClick.AddListener(StartButtonAction);
@@ -40,21 +50,29 @@ public class MenuHandler : MonoBehaviour
 
     void StartButtonAction()
     {
+        if (UIButtonClickAudio != null)
+            UIButtonClickAudio.Play();
         sessionManager.ShowMainMenu = false;
         LevelsSectionReload();
         ToggleMainMenu();
     }
     void SettingsButtonAction()
     {
+        if (UIButtonClickAudio != null)
+            UIButtonClickAudio.Play();
         SceneManager.LoadScene(settingsSceneBuildIndex);
     }
     void BackButtonAction()
     {
+        if (UIButtonClickAudio != null)
+            UIButtonClickAudio.Play();
         sessionManager.ShowMainMenu = true;
         ToggleMainMenu();
     }
     void QuitButtonAction()
     {
+        if (UIButtonClickAudio != null)
+            UIButtonClickAudio.Play();
         UnityEngine.Application.Quit();
     }
 
@@ -92,6 +110,10 @@ public class MenuHandler : MonoBehaviour
 
             levelObject.GetComponent<Button>().onClick.AddListener(() =>
             {
+                if (UIButtonClickAudio != null)
+                    UIButtonClickAudio.Play();
+                if (MainMenuBackgroundAudio != null)
+                    MainMenuBackgroundAudio.Pause();
                 sessionManager.SetCurrentLevel(gameObject, levelValue);
                 levelManager.LoadScene(levelValue);
             });

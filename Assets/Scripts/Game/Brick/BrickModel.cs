@@ -9,6 +9,19 @@ public class BrickModel : MonoBehaviour
     [SerializeField]
     BrickTypes brickType = BrickTypes.Standard;
 
+    void Awake()
+    {
+        switch (brickType)
+        {
+            case BrickTypes.Standard:
+                hits *= 3;
+                break;
+            case BrickTypes.Bonus:
+                hits *= 5;
+                break;
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         // If BrickType is not unbreakable then only proceed
