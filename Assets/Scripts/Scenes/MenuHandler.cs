@@ -88,8 +88,11 @@ public class MenuHandler : MonoBehaviour
         // Add the levels with latest status into the LevelsSection
         for (int i = 0; i < Constants.TotalLevels; i++)
         {
-            LevelStatus levelStatus = sessionManager.GetLevelStatus(i + 1);
+            int levelValue = i + 1;
+            LevelStatus levelStatus = sessionManager.GetLevelStatus(levelValue);
             GameObject levelObject = null;
+            float score = -1;
+
             switch (levelStatus)
             {
                 case LevelStatus.Locked:
@@ -100,12 +103,12 @@ public class MenuHandler : MonoBehaviour
                     break;
                 case LevelStatus.Completed:
                     levelObject = Instantiate(CompletedButtonPrefab, LevelsSection.transform);
+                    score = sessionManager.GetLevelScore(levelValue);
                     break;
             }
             if (levelObject == null || levelObject.transform.childCount < 1)
                 continue;
 
-            int levelValue = i + 1;
             levelObject.name = "Level " + levelValue;
 
             levelObject.GetComponent<Button>().onClick.AddListener(() =>
@@ -121,7 +124,7 @@ public class MenuHandler : MonoBehaviour
             GameObject childObject = levelObject.transform.GetChild(0).gameObject;
             if (childObject.GetComponent<TextMeshProUGUI>() != null)
             {
-                childObject.GetComponent<TextMeshProUGUI>().text = "Level-" + levelValue;
+                childObject.GetComponent<TextMeshProUGUI>().text = "Level-" + levelValue + (score == -1 ? "" : ("\n" + score.ToString() + "%"));
             }
         }
     }

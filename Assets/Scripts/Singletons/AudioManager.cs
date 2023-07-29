@@ -22,30 +22,28 @@ public class AudioManager : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
-
-        if (sounds != null)
-        {
-            foreach (Sound sound in sounds)
-            {
-                AudioSource source = gameObject.AddComponent<AudioSource>();
-                source.name = sound.Name;
-                source.clip = sound.Clip;
-                source.volume = sound.volume;
-                source.pitch = sound.pitch;
-                source.mute = sound.mute;
-                source.loop = sound.loop;
-                source.priority = sound.priority;
-
-                sound.source = source;
-            }
-            audioSource = findAudio(1);
-        }
+        ReloadAudioSources();
     }
 
-    void Start()
+    public void ReloadAudioSources()
     {
-        if (audioSource != null)
-            audioSource.Play();
+        if (sounds == null)
+            return;
+
+        float MasterVolume = PlayerPrefs.GetFloat("MasterVolume", 1);
+        foreach (Sound sound in sounds)
+        {
+            AudioSource source = gameObject.AddComponent<AudioSource>();
+            source.name = sound.Name;
+            source.clip = sound.Clip;
+            source.volume = sound.volume * MasterVolume;
+            source.pitch = sound.pitch;
+            source.mute = sound.mute;
+            source.loop = sound.loop;
+            source.priority = sound.priority;
+
+            sound.source = source;
+        }
     }
 
     public AudioSource findAudio(string name)
@@ -55,7 +53,11 @@ public class AudioManager : MonoBehaviour
 
         Sound sound = Array.Find(sounds, s => s.Name == name);
         if (sound != null)
+        {
+            float MasterVolume = PlayerPrefs.GetFloat("MasterVolume", 1);
+            sound.source.volume = MasterVolume;
             return sound.source;
+        }
 
         return null;
     }
@@ -67,7 +69,11 @@ public class AudioManager : MonoBehaviour
 
         Sound sound = Array.Find(sounds, s => s.Id == id);
         if (sound != null)
+        {
+            float MasterVolume = PlayerPrefs.GetFloat("MasterVolume", 1);
+            sound.source.volume = MasterVolume;
             return sound.source;
+        }
 
         return null;
     }

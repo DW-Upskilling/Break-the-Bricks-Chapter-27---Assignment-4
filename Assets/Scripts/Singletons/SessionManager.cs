@@ -73,4 +73,21 @@ public class SessionManager : MonoBehaviour
         }
         return (LevelStatus)PlayerPrefs.GetInt(key, 0);
     }
+
+    public void SetLevelScore(GameObject _gameObject, float score)
+    {
+        if (_gameObject.GetComponent<LevelHandler>() == null)
+            return;
+
+        string key = Constants.LevelScoreKey + currentLevel;
+        float currentScore = PlayerPrefs.GetFloat(key, -1);
+
+        PlayerPrefs.SetFloat(key, currentScore >= score ? currentScore : score);
+    }
+
+    public float GetLevelScore(int level)
+    {
+        string key = Constants.LevelScoreKey + level;
+        return PlayerPrefs.GetFloat(key, -1);
+    }
 }

@@ -6,8 +6,20 @@ public class BrickModel : MonoBehaviour
     int hits = 1;
     public int Hits { get { return hits; } }
 
+    bool gotHit = false;
+    public bool GotHit
+    {
+        get
+        {
+            bool _gotHit = gotHit;
+            gotHit = false;
+            return _gotHit;
+        }
+    }
+
     [SerializeField]
     BrickTypes brickType = BrickTypes.Standard;
+    public BrickTypes BrickType { get { return brickType; } }
 
     void Awake()
     {
@@ -30,6 +42,9 @@ public class BrickModel : MonoBehaviour
             // Making sure the collion made by the ball
             if (collision.gameObject.GetComponent<BallModel>() != null)
             {
+                // bool flag helpful to play audio in brickView
+                gotHit = true;
+
                 // decreasing number of hits left on the bricks
                 hits--;
             }
