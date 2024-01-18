@@ -6,6 +6,6 @@ namespace BreakTheBricks2D.GenericClass.MVC
     {
         public Controller Controller { get; protected set; }
 
-        public abstract void SetController(Controller _controller);
+        protected abstract void SetController(Controller _controller);
     }
 }

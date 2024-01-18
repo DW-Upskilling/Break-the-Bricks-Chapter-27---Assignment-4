@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
+using BreakTheBricks2D.Component.Ball;
+
 public class PaddleModel : MonoBehaviour
 {
     [SerializeField]
@@ -61,9 +63,9 @@ public class PaddleModel : MonoBehaviour
             BallsTracker[i] = false;
             if (Balls[i] != null)
             {
-                Balls[i].PaddleView = paddleView;
-                Balls[i].PaddleModel = this;
-                Balls[i].Id = i;
+                // Balls[i].PaddleView = paddleView;
+                // Balls[i].PaddleModel = this;
+                // Balls[i].Id = i;
             }
         }
 
@@ -108,7 +110,7 @@ public class PaddleModel : MonoBehaviour
             {
                 BallsTracker[i] = true;
                 ballsOnPaddle--;
-                Balls[i].Shoot(direction);
+                // Balls[i].Shoot(direction);
                 yield return new WaitForSeconds(avgWaitingTime);
             }
         }

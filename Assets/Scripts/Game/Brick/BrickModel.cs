@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using BreakTheBricks2D.Component;
+
 public class BrickModel : MonoBehaviour
 {
     [SerializeField]
@@ -40,7 +42,7 @@ public class BrickModel : MonoBehaviour
         if (brickType != BrickTypes.Unbreakable)
         {
             // Making sure the collion made by the ball
-            if (collision.gameObject.GetComponent<BallModel>() != null)
+            if (collision.gameObject.GetComponent<IBall>() != null)
             {
                 // bool flag helpful to play audio in brickView
                 gotHit = true;

@@ -23,7 +23,7 @@ namespace BreakTheBricks2D.GenericClass.MVC
     {
         public M Model { get; private set; }
 
-        public Controller(M _model, V _view): base(_view)
+        public Controller(V _view): base(_view)
         {
             this.Model = CreateModel(_view);
         }
@@ -31,12 +31,12 @@ namespace BreakTheBricks2D.GenericClass.MVC
         public abstract M CreateModel(V _view);
     }
 
-    public abstract class Controller<S, M, V> : Controller where S: ScriptableObject where M : Model<S> where V : View
+    public abstract class Controller<S, M, V> : Controller where S: ScriptableObject where M : Model where V : View
     {
         public V View { get; private set; }
         public M Model { get; private set; }
 
-        public Controller(S _scriptableObject, M _model, V _view): base()
+        public Controller(S _scriptableObject): base()
         {
             this.View = InstatiateView(_scriptableObject);
             this.Model = CreateModel(_scriptableObject);
